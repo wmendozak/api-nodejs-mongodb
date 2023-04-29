@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Sign In</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<h3><a href="/index.html"> Sign Up > </a></h3>
+			</div>
+
+			<div class="col-md-6 main">
+				<h1>Sign In</h1>
+				<form id="login">
+					<input type="text" autocomplete="off" id="username" placeholder="Username" />
+					<input type="password" autocomplete="off" id="password" placeholder="Password" />
+					<input type="submit" value="Submit Form" />
+				</form>
+			</div>
+			<div class="col-md-3">
+			</div>
+		</div>
+	</div>
+	<script>
+		const form = document.getElementById('login')
+		form.addEventListener('submit', login)
+
+		async function login(event) {
+			event.preventDefault()
+			const username = document.getElementById('username').value
+			const password = document.getElementById('password').value
+
+			const result = await fetch('/api/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					username,
+					password
+				})
+			}).then((res) => res.json())
+
+			if (result.status === 'ok') {
+				console.log('Got the token: ', result.data)
+				localStorage.setItem('token', result.data)
+				document.cookie = 'username='+username;
+				alert('Success')
+				location.href = '/change-password.html'
+			} else {
+				alert(result.error)
+			}
+		}
+	</script>
+</body>
+
+</html>

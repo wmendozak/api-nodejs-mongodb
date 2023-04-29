@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Sign Up</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<h3><a href="/login.html"> Sign in > </a></h3>
+			</div>
+
+			<div class="col-md-6 main">
+				<h1>Sign Up</h1>
+				<form id="reg-form">
+					<input type="text" autocomplete="off" id="username" placeholder="Username" />
+					<input type="password" autocomplete="off" id="password" placeholder="Password" />
+					<input type="submit" value="Submit Form" />
+				</form>
+			</div>
+			<div class="col-md-3">
+			</div>
+		</div>
+	</div>
+	<script>
+		const form = document.getElementById('reg-form')
+		form.addEventListener('submit', registerUser)
+
+		async function registerUser(event) {
+			event.preventDefault()
+			const username = document.getElementById('username').value
+			const password = document.getElementById('password').value
+
+			const result = await fetch('/api/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					username,
+					password
+				})
+			}).then((res) => res.json())
+
+			if (result.status === 'ok') {
+				alert('Success')
+				location.href = '/login.html'
+			} else {
+				alert(result.error)
+			}
+		}
+	</script>
+</body>
+
+</html>
